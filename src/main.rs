@@ -1,4 +1,5 @@
-use std::io;
+use std::{ array, io };
+use sorting_algos_rust::{ selection_sort, metric, AppState };
 use tui::{
     backend::CrosstermBackend,
     widgets::{ Block, Borders, BorderType, Paragraph, Wrap, BarChart },
@@ -7,48 +8,12 @@ use tui::{
     style::{ Style, Modifier, Color },
     text::Span,
 };
-use rand::prelude::*;
+
 use crossterm::{
     event::{ DisableMouseCapture, EnableMouseCapture, Event, KeyCode, read },
     execute,
     terminal::{ disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen },
 };
-
-struct AppState {
-    selected_index: usize,
-    selected: bool,
-}
-
-impl AppState {
-    fn new() -> Self {
-        Self { selected_index: 0, selected: false }
-    }
-
-    fn next(&mut self) {
-        if self.selected == true {
-            self.selected = false;
-        }
-        self.selected_index = (self.selected_index + 1) % 10;
-    }
-
-    fn previous(&mut self) {
-        if self.selected == true {
-            self.selected = false;
-        }
-        if self.selected_index == 0 {
-            self.selected_index = 9;
-        } else {
-            self.selected_index -= 1;
-        }
-    }
-    fn submit(&mut self) {
-        if self.selected == true {
-            self.selected = false;
-        } else {
-            self.selected = true;
-        }
-    }
-}
 
 fn main() -> Result<(), io::Error> {
     // setup terminal
@@ -108,6 +73,9 @@ fn main() -> Result<(), io::Error> {
                 .direction(Direction::Vertical)
                 .constraints([Constraint::Percentage(20), Constraint::Percentage(80)])
                 .split(body_chunks[1]);
+            let barchar_split = Layout::default()
+                .constraints([Constraint::Percentage(100)])
+                .split(display_sect_split[1]);
             let algorithms = [
                 "selection_sort",
                 "bubble_sort",
@@ -152,27 +120,32 @@ fn main() -> Result<(), io::Error> {
                     .borders(Borders::ALL)
                     .border_type(BorderType::Rounded)
                     .style(Style::default().bg(Color::Cyan));
+                let values: Vec<u64> = app_state.array
+                    .iter()
+                    .map(|&(_, value)| value)
+                    .collect();
+                let array_str = format!("RANDOMLY GENERATED ARRAY: {:?}", values);
+                let bar_chart = BarChart::default()
+                    .block(Block::default().title("BarChart").borders(Borders::ALL))
+                    .bar_width(4)
+                    .bar_gap(1)
+                    .bar_style(Style::default().fg(Color::Yellow).bg(Color::Black))
+                    .value_style(Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
+                    .label_style(Style::default().fg(Color::White))
+                    .data(&app_state.array)
+                    .max(60);
+                let display_unsorted_array = Paragraph::new(array_str)
+                    .block(Block::default().borders(Borders::ALL))
+                    .style(Style::default().fg(Color::LightBlue))
+                    .alignment(Alignment::Center)
+                    .wrap(Wrap { trim: true });
+                f.render_widget(bar_chart, barchar_split[0]);
 
+                f.render_widget(display_unsorted_array, display_sect_split[1]);
                 f.render_widget(paragraph, listchunk[i]);
                 f.render_widget(display_block, display_sect_split[0]);
             }
-            let bar_chart = BarChart::default()
-                .block(Block::default().title("BarChart").borders(Borders::ALL))
-                .bar_width(2)
-                .bar_gap(1)
-                .bar_style(Style::default().fg(Color::Yellow).bg(Color::Black))
-                .value_style(Style::default().fg(Color::Red).add_modifier(Modifier::BOLD))
-                .label_style(Style::default().fg(Color::White))
-                .data(
-                    &[
-                        ("B0", 0),
-                        ("B1", 2),
-                        ("B2", 4),
-                        ("B3", 3),
-                    ]
-                )
-                .max(20);
-            f.render_widget(bar_chart, display_sect_split[1]);
+
             f.render_widget(block_header, chunks[0]);
         })?;
 
@@ -198,14 +171,4 @@ fn main() -> Result<(), io::Error> {
     terminal.show_cursor()?;
 
     Ok(())
-}
-
-fn generate_random_number() -> Vec<u64> {
-    let mut rng = thread_rng();
-    let mut arr: Vec<u64> = Vec::new();
-    for x in 0..50 {
-        arr[x] = rng.gen_range(0..50);
-    }
-
-    arr
 }
