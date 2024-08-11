@@ -32,13 +32,14 @@ fn main() -> Result<(), io::Error> {
             let size = f.size();
             let chunks = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints([Constraint::Percentage(16), Constraint::Percentage(74)])
+                .constraints([Constraint::Percentage(19), Constraint::Percentage(71)])
                 .split(size);
             let instructions = Paragraph::new(
                 "Instructions:\n\
                 - Press Up/Down to navigate through the algorithms.\n\
                 - Press Left/Right to step through each iteration.\n\
                 - Press Enter to select the algorithm.
+                - Press q to exit.
                 - Press T to change the theme
                 - Press R to reset"
             )
@@ -83,7 +84,7 @@ fn main() -> Result<(), io::Error> {
                 .split(body_chunks[0]);
             let display_sect_split = Layout::default()
                 .direction(Direction::Vertical)
-                .constraints([Constraint::Percentage(20), Constraint::Percentage(80)])
+                .constraints([Constraint::Percentage(15), Constraint::Percentage(75)])
                 .split(body_chunks[1]);
             let barchar_split = Layout::default()
                 .constraints([Constraint::Percentage(100)])
@@ -119,7 +120,7 @@ fn main() -> Result<(), io::Error> {
                 let style = if app_state.selected_index == i {
                     if app_state.selected == true {
                         Style::default()
-                            .fg(Color::Rgb(0, 0, 0))
+                            .fg(Color::Rgb(170, 255, 0))
                             .bg(app_state.theme)
                             .add_modifier(Modifier::BOLD)
                     } else {
@@ -185,7 +186,7 @@ fn main() -> Result<(), io::Error> {
                             .border_style(Style::default().fg(app_state.theme))
                     )
                     .bar_width(4)
-                    .bar_gap(2)
+                    .bar_gap(1)
                     .bar_style(Style::default())
                     .data(&app_state.metric.iterations[app_state.curr_index])
                     .max(50);

@@ -22,7 +22,7 @@ impl AppState {
             array: generate_array::generate(),
             metric: Metric::new(),
             curr_index: 0,
-            theme: Color::Rgb(253, 93, 115),
+            theme: Color::Rgb(0, 63, 145),
         }
     }
     pub fn change_theme(&mut self) {
@@ -51,7 +51,7 @@ impl AppState {
     }
     pub fn right(&mut self) {
         if
-            self.curr_index != self.array.len() - 2 &&
+            self.curr_index != self.array.len() - 1 &&
             self.selected_index != 9 &&
             self.selected != false
         {
@@ -67,6 +67,16 @@ impl AppState {
         match self.selected_index {
             0 => {
                 let metric: Metric = selection_sort::sort(self);
+                self.array = metric.sortedArray;
+                self.metric = metric;
+            }
+            1 => {
+                let metric: Metric = bubble_sort::sort(self);
+                self.array = metric.sortedArray;
+                self.metric = metric;
+            }
+            2 => {
+                let metric: Metric = insertion_sort::sort(self);
                 self.array = metric.sortedArray;
                 self.metric = metric;
             }
@@ -100,8 +110,8 @@ impl Metric {
 
 pub mod generate_array;
 pub mod selection_sort;
-// pub mod bubble_sort;
-// pub mod insertion_sort;
+pub mod bubble_sort;
+pub mod insertion_sort;
 // pub mod merge_sort;
 // pub mod quick_sort;
 // pub mod heap_sort;
