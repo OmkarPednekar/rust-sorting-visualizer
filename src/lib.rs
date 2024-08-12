@@ -80,6 +80,11 @@ impl AppState {
                 self.array = metric.sortedArray;
                 self.metric = metric;
             }
+            3 => {
+                let metric: Metric = merge_sort::sort(self);
+                self.array = metric.sortedArray;
+                self.metric = metric;
+            }
             9 => {
                 self.metric = Metric::new();
                 self.array = generate_array::generate();
@@ -112,7 +117,7 @@ pub mod generate_array;
 pub mod selection_sort;
 pub mod bubble_sort;
 pub mod insertion_sort;
-// pub mod merge_sort;
+pub mod merge_sort;
 // pub mod quick_sort;
 // pub mod heap_sort;
 // pub mod counting_sort;
