@@ -11,8 +11,6 @@ pub fn sort(app_state: &AppState) -> Metric {
         let key = values[i];
         let mut j = (i as isize) - 1;
 
-        // Shift elements of values[0..i-1], that are greater than key, to one position ahead
-        // of their current position
         while j >= 0 && key < values[j as usize] {
             values[(j + 1) as usize] = values[j as usize];
             j -= 1;

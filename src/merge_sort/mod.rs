@@ -28,34 +28,17 @@ pub fn sort(app_state: &AppState) -> Metric {
 
     metric_sent
 }
-fn conquer(
-    arr: Vec<u64>
-    // curr_iteration: usize,
-    // iterations: [[(&'static str, u64); 20]; 20],
-    // array: [(&'static str, u64); 20]
-) -> Vec<u64> {
-    // let mut curr_iter = [[("", 0); 20]; 20];
+fn conquer(arr: Vec<u64>) -> Vec<u64> {
     if arr.len() <= 1 {
         return arr;
     }
 
-    // Find the middle index
     let mid = arr.len() / 2;
 
-    // Recursively split and sort both halves
     let left = conquer(arr[..mid].to_vec());
     let right = conquer(arr[mid..].to_vec());
 
-    // Merge the sorted halves
     let mut res = divide(left, right);
-
-    // curr_iter[curr_iteration] = array
-    //     .iter()
-    //     .enumerate()
-    //     .map(|(i, &(label, _))| (label, res[i]))
-    //     .collect::<Vec<_>>()
-    //     .try_into()
-    //     .expect("Array conversion failed");
     res
 }
 fn divide(left: Vec<u64>, right: Vec<u64>) -> Vec<u64> {
@@ -72,18 +55,13 @@ fn divide(left: Vec<u64>, right: Vec<u64>) -> Vec<u64> {
             j += 1;
         }
     }
-
-    // Add any remaining elements from the left array
     while i < left.len() {
         result.push(left[i]);
         i += 1;
     }
-
-    // Add any remaining elements from the right array
     while j < right.len() {
         result.push(right[j]);
         j += 1;
     }
-
     result
 }

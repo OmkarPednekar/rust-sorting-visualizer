@@ -96,9 +96,6 @@ fn main() -> Result<(), io::Error> {
                 "Merge Sort",
                 "Quick Sort",
                 "Counting Sort",
-                "Radix Sort",
-                "Heap Sort",
-                "Bucket Sort",
                 "Generate Array",
             ];
             let algoInfo = vec![
@@ -108,9 +105,6 @@ fn main() -> Result<(), io::Error> {
                 "Merge sort is a divide-and-conquer algorithm that splits the array into smaller subarrays, recursively sorts them, and then merges them back together. It’s efficient with a guaranteed O(n log n) time complexity, making it ideal for large datasets.",
                 "Quick sort is a fast, divide-and-conquer algorithm that selects a 'pivot' element partitions the array into elements less than and greater than the pivot, and recursively sorts the subarrays. It’s efficient but performance depends on pivot selection.",
                 "Counting sort counts the occurrences of each distinct element in the input and uses this information to place elements in their correct positions. It’s efficient for sorting integers or objects with integer keys, especially when the range of values is limited.",
-                "Radix sort processes each digit of the numbers, starting from the least significant to the most significant digit, using a stable sorting algorithm like counting sort. It’s efficient for sorting large numbers or strings with a fixed number of digits.",
-                "Heap sort converts the array into a binary heap and repeatedly extracts the maximum (or minimum) element from the heap to build a sorted array. It’s efficient with O(n log n) time complexity and requires no additional memory for the sort.",
-                "Bucket sort divides the elements into several buckets, sorts each bucket individually, and then concatenates them to form the sorted array. It’s useful for sorting uniformly distributed data and can be very efficient when the number of buckets is appropriate.",
                 "Generates a Random Array"
             ];
             let background = Block::default().style(Style::default().bg(Color::Rgb(255, 255, 255)));

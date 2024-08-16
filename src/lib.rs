@@ -36,7 +36,11 @@ impl AppState {
         if self.selected == true {
             self.selected = false;
         }
-        self.selected_index = (self.selected_index + 1) % 10;
+        if self.selected_index == 6 {
+            self.selected_index = 0;
+        } else {
+            self.selected_index += 1;
+        }
     }
 
     pub fn previous(&mut self) {
@@ -44,7 +48,7 @@ impl AppState {
             self.selected = false;
         }
         if self.selected_index == 0 {
-            self.selected_index = 9;
+            self.selected_index = 6;
         } else {
             self.selected_index -= 1;
         }
@@ -52,14 +56,14 @@ impl AppState {
     pub fn right(&mut self) {
         if
             self.curr_index != self.array.len() - 1 &&
-            self.selected_index != 9 &&
+            self.selected_index != 6 &&
             self.selected != false
         {
             self.curr_index += 1;
         }
     }
     pub fn left(&mut self) {
-        if self.curr_index != 0 && self.selected_index != 9 && self.selected != false {
+        if self.curr_index != 0 && self.selected_index != 6 && self.selected != false {
             self.curr_index -= 1;
         }
     }
@@ -85,7 +89,17 @@ impl AppState {
                 self.array = metric.sortedArray;
                 self.metric = metric;
             }
-            9 => {
+            4 => {
+                let metric: Metric = quick_sort::sort(self);
+                self.array = metric.sortedArray;
+                self.metric = metric;
+            }
+            5 => {
+                let metric: Metric = counting_sort::sort(self);
+                self.array = metric.sortedArray;
+                self.metric = metric;
+            }
+            6 => {
                 self.metric = Metric::new();
                 self.array = generate_array::generate();
                 self.curr_index = 0;
@@ -96,7 +110,7 @@ impl AppState {
         if self.selected == true {
             self.selected = false;
         } else {
-            if self.curr_index == 0 && self.selected_index != 9 {
+            if self.curr_index == 0 && self.selected_index != 6 {
                 self.curr_index += 1;
             }
             self.selected = true;
@@ -118,8 +132,8 @@ pub mod selection_sort;
 pub mod bubble_sort;
 pub mod insertion_sort;
 pub mod merge_sort;
-// pub mod quick_sort;
-// pub mod heap_sort;
-// pub mod counting_sort;
+pub mod quick_sort;
+pub mod counting_sort;
 // pub mod radix_sort;
+// pub mod heap_sort;
 // pub mod bucket_sort;
